@@ -15,7 +15,7 @@ public class ItemModel {
     private Long idItem;
 
     @Column(name = "item_code")
-    private String itemcode;
+    private String itemCode;
 
     @Column(name = "item_name")
     private String itemName;

@@ -45,6 +45,6 @@ public class OrdenCompraModel {
     @Column(name = "orden_cuadrante_p")
     private String cuadrante;
 
-
+    private List<DetalleCompraModel> detallesOrdenes;
 
 }

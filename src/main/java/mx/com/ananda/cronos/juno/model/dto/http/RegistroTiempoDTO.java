@@ -1,5 +1,6 @@
 package mx.com.ananda.cronos.juno.model.dto.http;
 
+import lombok.Data;
 import mx.com.ananda.cronos.juno.model.entity.OrdenCompraModel;
 
 import javax.persistence.Column;
@@ -7,6 +8,7 @@ import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Data
 public class RegistroTiempoDTO {
 
     private Long idRegistro;
@@ -35,6 +37,7 @@ public class RegistroTiempoDTO {
     private String comentariosAlmacen;
     private int numeroSemana;
     private int complementoOrden;
+    private long docNum;
     private OrdenCompraModel ordenCompra;
 
 }

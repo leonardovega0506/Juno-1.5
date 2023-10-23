@@ -1,9 +1,14 @@
 package mx.com.ananda.cronos.juno.model.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Data
+@Entity
+@Table(name = "registro_tiempo")
 public class RegistroTiempoModel {
 
     @Id
@@ -107,6 +112,9 @@ public class RegistroTiempoModel {
     //Genera el numero del complemento de la orden
     @Column(name = "complemento")
     private int complementoOrden;
+
+    @Column(name = "docNum")
+    private Long docNum;
 
     //Asociacion con orden de compra
     @ManyToOne

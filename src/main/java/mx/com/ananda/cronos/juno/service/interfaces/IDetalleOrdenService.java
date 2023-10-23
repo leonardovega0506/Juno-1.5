@@ -8,7 +8,7 @@ import java.util.List;
 public interface IDetalleOrdenService {
 
 
-    DetalleCompraDTO saveDetalles(DetalleCompraModel detalleCompraModel);
+    DetalleCompraDTO saveDetalles(DetalleCompraDTO detalleCompraDTO);
 
     List<DetalleCompraDTO> findDetallesByIDOrdenCompra(Long idOrdenCompra);
 

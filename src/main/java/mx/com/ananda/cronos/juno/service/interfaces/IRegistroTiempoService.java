@@ -7,15 +7,15 @@ import java.util.Optional;
 
 public interface IRegistroTiempoService {
 
-    RegistroTiempoResponse getAllRegistros(int numeroPagina,int sizePagina, String area);
+    RegistroTiempoResponse getAllRegistros(int numeroPagina,int sizePagina, String orderBy,String sortDir,String area);
 
-    RegistroTiempoResponse getAllRegistroByCardName(int numeroPagina, int sizePagina, String area, String cardName);
+    RegistroTiempoResponse getAllRegistroByCardName(int numeroPagina, int sizePagina, String area,String orderBy, String sortDir, String cardName);
 
-    RegistroTiempoDTO saveRegistroTiempo(RegistroTiempoDTO registroTiempoDTO);
+    RegistroTiempoDTO saveRegistroTiempo(RegistroTiempoDTO registroTiempoDTO, String TipoPedido);
 
-    Optional<RegistroTiempoDTO> updateRegistroTiempo(RegistroTiempoDTO registroTiempoDTO);
+    RegistroTiempoDTO updateRegistroTiempo(RegistroTiempoDTO registroTiempoDTO);
 
-    Optional<RegistroTiempoDTO> getRegistroById(Long idRegistro);
+    RegistroTiempoDTO getRegistroById(Long idRegistro);
 
     void deleteRegistroById(Long idRegistro);
 }
