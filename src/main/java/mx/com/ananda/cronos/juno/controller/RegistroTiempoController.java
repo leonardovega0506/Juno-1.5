@@ -37,7 +37,7 @@ public class RegistroTiempoController {
         return new ResponseEntity<>(sRegistro.getAllRegistros(pageNumber,pageSize,orderBy,sortDir,area), HttpStatus.OK);
     }
 
-    @GetMapping("/porveedor")
+    @GetMapping("/proveedor")
     public ResponseEntity<RegistroTiempoResponse> traerRegistrosProveedor(
             @RequestParam(value = "pageNO",defaultValue = GlobalConstants.NUMERO_PAGINA_DEFECTO) int pageNumber,
             @RequestParam(value= "pageSize", defaultValue = GlobalConstants.MEDIDA_PAGINA_DEFECTO) int pageSize,
@@ -53,18 +53,21 @@ public class RegistroTiempoController {
         return new ResponseEntity<>(sRegistro.getRegistroById(id),HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('RECIBO')")
     @PostMapping("")
     public ResponseEntity<RegistroTiempoDTO> guardarRegistros(@RequestBody RegistroTiempoDTO registroTiempoDTO,
                                                               @RequestParam(value = "tipo") String tipo){
         return new ResponseEntity<>(sRegistro.saveRegistroTiempo(registroTiempoDTO,tipo),HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> eliminarRegistroById(@PathVariable(value = "id") Long id){
         sRegistro.deleteRegistroById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('RECIBO')")
     @PutMapping("/compra-m/{id}")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoCompraMM(@PathVariable(value = "id") Long id) {
         LocalTime tiempo = LocalTime.now();
@@ -79,6 +82,7 @@ public class RegistroTiempoController {
         return new ResponseEntity<>(sRegistro.updateRegistroTiempo(registroTraido), HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('COMPRAS')")
     @PutMapping("/recibo-l/{id}")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoReciboL(@PathVariable(value = "id") Long id) {
         LocalTime tiempo = LocalTime.now();
@@ -93,6 +97,7 @@ public class RegistroTiempoController {
         return new ResponseEntity<>(sRegistro.updateRegistroTiempo(registroTraido), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('RECIBO')")
     @PutMapping("/transito/{id}")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoTransito(@PathVariable(value = "id") Long id, @RequestParam String maquila) {
         LocalTime tiempo = LocalTime.now();
@@ -114,6 +119,7 @@ public class RegistroTiempoController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('ALMACEN')")
     @PutMapping("/almacen-s/{id}")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoAlmacen(@PathVariable(value = "id") Long id) {
         LocalTime tiempo = LocalTime.now();
@@ -129,6 +135,7 @@ public class RegistroTiempoController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('ALMACEN')")
     @PutMapping("/almacen-v/{id}")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoAlmacenVerificado(@PathVariable(value = "id") Long id, @RequestParam String comentarios) {
         LocalTime tiempo = LocalTime.now();
@@ -155,6 +162,7 @@ public class RegistroTiempoController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('RECIBO')")
     @PutMapping("/recibo-pedidoEspecial/{id}")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoPedidoEspecial(@PathVariable(value = "id") Long id) {
         LocalTime tiempo = LocalTime.now();
@@ -170,6 +178,7 @@ public class RegistroTiempoController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('ALMACEN')")
     @PutMapping("/almacen-pedidoEspecial/{id}")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoPedidoEspecialLiberado(@PathVariable(value = "id") Long id) {
         RegistroTiempoDTO registroTraido = sRegistro.getRegistroById(id);
@@ -183,6 +192,7 @@ public class RegistroTiempoController {
         return new ResponseEntity<>(sRegistro.updateRegistroTiempo(registroTraido), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('FOTO')")
     @PutMapping("/foto-liberado")
     public ResponseEntity<RegistroTiempoDTO> generarTiempoFotoOrden(@PathVariable(value = "id") Long id) {
         RegistroTiempoDTO registroTraido = sRegistro.getRegistroById(id);

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import mx.com.ananda.cronos.juno.exception.ResourceNotFoundException;
 import mx.com.ananda.cronos.juno.model.dto.http.ItemDTO;
 import mx.com.ananda.cronos.juno.model.dto.http.ItemFotoDTO;
+import mx.com.ananda.cronos.juno.model.dto.sap.ItemSAP;
 import mx.com.ananda.cronos.juno.model.entity.ItemFotoModel;
 import mx.com.ananda.cronos.juno.model.entity.ItemModel;
 import mx.com.ananda.cronos.juno.repository.IRepositoryItem;
@@ -74,8 +75,8 @@ public class ItemServiceImpl implements IServiceItem {
     @Override
     public ItemDTO saveItem(ItemDTO itemDTO) {
         log.info("HA ENTRADO A CREAR UN ITEM");
-        ItemModel nuevoItem = new ItemModel(); // mapearDTOEntidad(restTemplate.postForObject(basePath + "/item", itemDTO, ItemDTO.class));
-        ItemDTO itemRegreso = mapearEndidadDTO(iItem.save(nuevoItem));
+        iItem.save(mapearDTOEntidad(itemDTO));
+        ItemDTO itemRegreso = mapearSAPDTO(restTemplate.postForObject(basePath + "/item", itemDTO, ItemSAP.class));
         log.info("EXITO! SE HA CREADO EXITOSAMENTE EL ITEM");
         return itemRegreso;
     }
@@ -93,9 +94,21 @@ public class ItemServiceImpl implements IServiceItem {
     @Override
     public ItemDTO getItemByItemcode(String itemCode) {
         //Obtener y parsear el producto
-        ItemModel itemBuscadoItemCode = iItem.findByItemCode(itemCode).orElseThrow(()-> new ResourceNotFoundException("Producto","codigo articulo",itemCode));
-        log.info("SE HA ENCONTRADO CORRECTMENTE EL PRODUCTO BUSCADO Y PROCEDERA A DEVOLVER EN FORMA DE DTO");
-        return mapearEndidadDTO(itemBuscadoItemCode);
+
+        ItemDTO itemBuscadoDTO = mapearSAPDTO(restTemplate.getForObject(basePath+"/itemP/itemCode?itemCode="+itemCode,ItemSAP.class));
+
+        if(itemBuscadoDTO.getItemCode() == null){
+            return null;
+        }
+        else{
+            ItemModel itemBuscadoItemCode = iItem.findByItemCode(itemBuscadoDTO.getItemCode()).orElseGet(()->{
+                log.info("SE CREARA UNO NUEVO");
+                 ItemModel itemNuevo = iItem.save(mapearDTOEntidad(itemBuscadoDTO));
+                return itemNuevo;
+            });
+            log.info("SE HA ENCONTRADO CORRECTMENTE EL PRODUCTO BUSCADO Y PROCEDERA A DEVOLVER EN FORMA DE DTO");
+            return mapearEndidadDTO(itemBuscadoItemCode);
+        }
     }
 
 
@@ -105,12 +118,15 @@ public class ItemServiceImpl implements IServiceItem {
         //Buscar el producto por el id
         ItemModel itemBuscado = iItem.findById(itemDTO.getIdItem()).orElseThrow(()->new ResourceNotFoundException("Producto","id",itemDTO.getIdItem()));
         log.info("SE HA ENCONTRADO CORRECTMENTE EL PRODUCTO BUSCADO");
-        ItemModel itemActualizado = mapearDTOEntidad(itemDTO);
-        //Actualizar el producto
-        //ItemModel itemActualizado = new ItemModel(); // mapearDTOEntidad(restTemplate.postForObject(basePath + "/item", itemDTO, ItemDTO.class));
-        iItem.save(itemBuscado);
-        log.info("SE HA ACTUALIZADO CORRECTAMENTE EL PRODUCTO");
+        if(itemBuscado.getIdItem() == itemDTO.getIdItem()) {
+            //Actualizar el producto
+            restTemplate.put(basePath + "/item?itemCode="+itemBuscado.getItemCode(), itemDTO, ItemSAP.class);
+            iItem.save(mapearDTOEntidad(itemDTO));
+            log.info("SE HA ACTUALIZADO CORRECTAMENTE EL PRODUCTO");
+        }
     }
+
+
     //Mapear los datos de dto a entidad
     protected  ItemModel mapearDTOEntidad(ItemDTO itemDTO){
         ItemModel itemEntidad = modelMapper.map(itemDTO,ItemModel.class);
@@ -121,6 +137,12 @@ public class ItemServiceImpl implements IServiceItem {
     //Mapear los datos de entidad a dto
     protected  ItemDTO mapearEndidadDTO(ItemModel itemModel){
         ItemDTO itemDTO = modelMapper.map(itemModel, ItemDTO.class);
+        return itemDTO;
+    }
+
+    private ItemDTO mapearSAPDTO(ItemSAP itemSAP){
+        ItemDTO itemDTO = modelMapper.map(itemSAP,ItemDTO.class);
+        itemDTO.setItemCode(itemSAP.getItemCode());
         return itemDTO;
     }
 }

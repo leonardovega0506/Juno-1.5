@@ -7,14 +7,14 @@ import javax.persistence.*;
 @Data
 public class ItemDTO {
         private Long idItem;
-        private String itemcode;
+        private String itemCode;
         private String itemName;
         public String vatLiable;
         public String taxType;
         private String ncmCode;
         public String indirectTax;
         private char itemType;
-        private String mainsupplier;
+        private String mainSupplier;
         private int itemsGroupCode;
         private Double salesUnitWeight;
         private int salesWeightUnit;

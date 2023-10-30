@@ -12,6 +12,8 @@ import java.time.LocalTime;
 public class ItemFotoModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_foto")
     private Long idFoto;
 
     @Column(name = "item_code")
@@ -31,5 +33,9 @@ public class ItemFotoModel {
 
     @ManyToOne
     private OrdenCompraModel orden;
+
+
+    @ManyToOne
+    private ItemModel itemModel;
 
 }

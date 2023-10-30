@@ -45,6 +45,11 @@ public class OrdenCompraModel {
     @Column(name = "orden_cuadrante_p")
     private String cuadrante;
 
+    @OneToMany(mappedBy = "orden")
     private List<DetalleCompraModel> detallesOrdenes;
+
+
+    @OneToMany(mappedBy = "orden")
+    private List<ItemFotoModel> fotoOrdenes;
 
 }

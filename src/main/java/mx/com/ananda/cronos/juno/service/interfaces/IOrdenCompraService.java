@@ -1,6 +1,7 @@
 package mx.com.ananda.cronos.juno.service.interfaces;
 
 import mx.com.ananda.cronos.juno.model.dto.http.DetalleCompraDTO;
+import mx.com.ananda.cronos.juno.model.dto.http.ItemFotoDTO;
 import mx.com.ananda.cronos.juno.model.dto.http.OrdenCompraDTO;
 import mx.com.ananda.cronos.juno.response.OrdenCompraResponse;
 
@@ -22,5 +23,7 @@ public interface IOrdenCompraService {
     OrdenCompraDTO assignOrderSAP(Long idOrder, Long docNum);
 
     List<DetalleCompraDTO> getDetailsOrder(Long idOrder);
+
+    List<ItemFotoDTO> getDetailsFoto(Long idOrder);
 
 }

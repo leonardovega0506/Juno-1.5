@@ -101,15 +101,17 @@ public class ItemFotoServiceImpl implements IFotoItemService {
     }
 
     //Mapear los datos de dto a entidad
-    public ItemFotoModel mapearDTOEntidad(ItemFotoDTO itemFotoDTO){
+    protected ItemFotoModel mapearDTOEntidad(ItemFotoDTO itemFotoDTO){
         ItemFotoModel itemFotoEntidad = modelMapper.map(itemFotoDTO,ItemFotoModel.class);
         return itemFotoEntidad;
     }
 
 
     //Mapear los datos de entidad a dto
-    private ItemFotoDTO mapearEndidadDTO(ItemFotoModel itemFotoModel){
+    protected ItemFotoDTO mapearEndidadDTO(ItemFotoModel itemFotoModel){
         ItemFotoDTO itemFotoDTO = modelMapper.map(itemFotoModel, ItemFotoDTO.class);
         return itemFotoDTO;
     }
+
+
 }

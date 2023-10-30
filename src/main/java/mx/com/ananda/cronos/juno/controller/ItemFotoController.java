@@ -8,6 +8,7 @@ import mx.com.ananda.cronos.juno.util.GlobalConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -18,6 +19,7 @@ public class ItemFotoController {
     @Autowired
     private IFotoItemService sFoto;
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('FOTO')")
     @GetMapping("")
     public ResponseEntity<ItemFotoResponse> traertemsFotos(
             @RequestParam(value = "pageNO",defaultValue = GlobalConstants.NUMERO_PAGINA_DEFECTO) int pageNumber,
@@ -27,21 +29,25 @@ public class ItemFotoController {
         return new ResponseEntity<>(sFoto.getAllItems(pageNumber,pageSize,orderBy,sortDir), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('FOTO')")
     @GetMapping("/{id}")
     public ResponseEntity<ItemFotoDTO> traerItemFotoById(@PathVariable(value = "id") Long idFoto){
         return new ResponseEntity<>(sFoto.getItemById(idFoto),HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('FOTO')")
     @GetMapping("/foto")
     public ResponseEntity<ItemFotoDTO> traerItemFotoByItemCode(@RequestParam(value = "itemCode") String itemCode){
         return new ResponseEntity<>(sFoto.getItemByItemCode(itemCode),HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('FOTO')")
     @PostMapping("")
     public ResponseEntity<ItemFotoDTO> guardarFoto(@RequestBody ItemFotoDTO itemFotoDTO){
         return new ResponseEntity<>(sFoto.saveItem(itemFotoDTO),HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('FOTO')")
     @PutMapping("")
     public ResponseEntity<HttpStatus> actualizarFoto(@RequestBody ItemFotoDTO itemFotoDTO){
         sFoto.updateItemFoto(itemFotoDTO);
