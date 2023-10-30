@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/ananda/auth")
+@RequestMapping("ananda/cronos1_3/juno1_5/auth")
 @CrossOrigin("*")
 @Slf4j
 public class AuthController {

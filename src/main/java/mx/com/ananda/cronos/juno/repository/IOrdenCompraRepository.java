@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface IOrdenCompraRepository extends JpaRepository<OrdenCompraModel,Long> {
+    Optional<OrdenCompraModel> findByNotaRemision(String nota_remision);
     Optional<OrdenCompraModel> findByDocNum(Long docNum);
 
 }

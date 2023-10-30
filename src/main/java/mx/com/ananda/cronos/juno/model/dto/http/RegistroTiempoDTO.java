@@ -29,6 +29,7 @@ public class RegistroTiempoDTO {
     private LocalDate date_fotos_registro;
     private LocalTime time_fotos_orden;
     private String area;
+    private String notaRemision;
     private String cuadrante;
     private String proveedor;
     private String progreso;

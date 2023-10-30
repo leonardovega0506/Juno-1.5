@@ -25,7 +25,7 @@ public class OrdenCompraModel {
     private String docDate;
 
     @Column(name = "orden_nota")
-    private String nota_remision;
+    private String notaRemision;
 
     @Column(name = "total_Sys")
     private double docTotalSys;
@@ -51,5 +51,8 @@ public class OrdenCompraModel {
 
     @OneToMany(mappedBy = "orden")
     private List<ItemFotoModel> fotoOrdenes;
+
+    @OneToMany(mappedBy = "orden")
+    private List<RegistroTiempoModel> registros;
 
 }

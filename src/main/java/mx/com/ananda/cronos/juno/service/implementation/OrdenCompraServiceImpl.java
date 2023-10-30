@@ -181,7 +181,7 @@ public class OrdenCompraServiceImpl implements IOrdenCompraService {
             ordenBuscada.setDocTotal(ordenCompra.getDocTotal());
             ordenBuscada.setDocTotalSys(ordenCompra.getDocTotalSys());
             ordenBuscada.setVatSum(ordenCompra.getVatSum());
-            ordenBuscada.setNota_remision(ordenCompra.getNota_remision());
+            ordenBuscada.setNotaRemision(ordenCompra.getNota_remision());
             ordenBuscada.setCardCode(ordenCompra.getCardCode());
             OrdenCompraModel ordenAsignada = iOrden.save(ordenBuscada);
             return mapearEndidadDTO(ordenAsignada);

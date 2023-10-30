@@ -53,7 +53,7 @@ public class RegistroTiempoController {
         return new ResponseEntity<>(sRegistro.getRegistroById(id),HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('RECIBO')")
+    //@PreAuthorize("hasRole('ADMIN') OR hasRole('RECIBO')")
     @PostMapping("")
     public ResponseEntity<RegistroTiempoDTO> guardarRegistros(@RequestBody RegistroTiempoDTO registroTiempoDTO,
                                                               @RequestParam(value = "tipo") String tipo){

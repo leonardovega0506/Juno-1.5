@@ -31,11 +31,11 @@ public class ItemFotoModel {
     @Column(name = "foto_tomada")
     private boolean fotoFomada;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private OrdenCompraModel orden;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private ItemModel itemModel;
 
 }

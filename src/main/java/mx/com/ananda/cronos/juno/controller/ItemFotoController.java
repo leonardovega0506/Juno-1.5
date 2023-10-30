@@ -36,7 +36,7 @@ public class ItemFotoController {
     }
 
     @PreAuthorize("hasRole('ADMIN') OR hasRole('FOTO')")
-    @GetMapping("/foto")
+    @GetMapping("/itemCode")
     public ResponseEntity<ItemFotoDTO> traerItemFotoByItemCode(@RequestParam(value = "itemCode") String itemCode){
         return new ResponseEntity<>(sFoto.getItemByItemCode(itemCode),HttpStatus.OK);
     }

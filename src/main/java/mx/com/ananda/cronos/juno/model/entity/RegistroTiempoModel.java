@@ -86,6 +86,9 @@ public class RegistroTiempoModel {
     @Column(name = "cuadrante")
     private String cuadrante;
 
+    @Column(name = "nota_remision")
+    private String notaRemision;
+
     //Identificador
     @Column(name = "proveedor_recibo")
     private String proveedor;
@@ -113,12 +116,13 @@ public class RegistroTiempoModel {
     @Column(name = "complemento")
     private int complementoOrden;
 
+
     @Column(name = "docNum")
     private Long docNum;
 
     //Asociacion con orden de compra
-    @ManyToOne
-    private OrdenCompraModel ordenCompra;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private OrdenCompraModel orden;
 
 
 }

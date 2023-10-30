@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface IRegistroTiempoRepository extends JpaRepository<RegistroTiempoModel,Long> {
+    List<RegistroTiempoModel> findByNotaRemision(String nota_Remision);
     List<RegistroTiempoModel> findByDocNum(Long docNum);
 }

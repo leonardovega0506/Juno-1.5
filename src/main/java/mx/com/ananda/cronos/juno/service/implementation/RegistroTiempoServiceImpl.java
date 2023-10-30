@@ -161,16 +161,19 @@ public class RegistroTiempoServiceImpl implements IRegistroTiempoService {
                     registroNuevo.setTimeReciboOCLlegada(LocalTime.now());
                     registroNuevo.setEstatus("Llegada a Recibo, Pedido Especial");
                     registroNuevo.setProgreso("33.33%");
-                    registroNuevo.setCuadrante(registroTiempoDTO.getCuadrante());
+
+                    registroNuevo.setDocNum(registroTiempoDTO.getDocNum());
                     registroNuevo.setNumeroSemana(calendar.get(Calendar.WEEK_OF_YEAR));
                     log.info("LOS PARAMETROS HAN SDO ASIGNADOS");
 
                     //Obtener la orden asociada
                     OrdenCompraDTO orden = sOrden.getOrderByDocNum(registroTiempoDTO.getDocNum());
                     orden.setCuadrante(registroTiempoDTO.getCuadrante());
-                    iOrden.save(impOrden.mapearDTOEntidad(orden));
-                    registroNuevo.setOrdenCompra(impOrden.mapearDTOEntidad(orden));
+                    registroNuevo.setOrden(iOrden.save(mapearDTOEntidad(orden)));
                     log.info("SE HA GUARDADO EL REGISTRO NUEVO");
+                    registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
+                    return registroGuardado;
+
                 } else {
 
                     //Crear y pasar parametros de creacion de pedido especial
@@ -181,18 +184,20 @@ public class RegistroTiempoServiceImpl implements IRegistroTiempoService {
                     registroNuevo.setEstatus("Llegada a Recibo, Pedido Especial");
                     registroNuevo.setProgreso("33.33%");
                     registroNuevo.setCuadrante(registroTiempoDTO.getCuadrante());
+                    registroNuevo.setDocNum(registroTiempoDTO.getDocNum());
                     registroNuevo.setNumeroSemana(calendar.get(Calendar.WEEK_OF_YEAR));
                     log.info("LOS PARAMETROS HAN SDO ASIGNADOS");
 
                     //Obtener la orden asociada
                     OrdenCompraDTO orden = sOrden.getOrderByDocNum(registroTiempoDTO.getDocNum());
                     orden.setCuadrante(registroTiempoDTO.getCuadrante());
-                    iOrden.save(impOrden.mapearDTOEntidad(orden));
-                    registroNuevo.setOrdenCompra(impOrden.mapearDTOEntidad(orden));
+                    registroNuevo.setOrden(iOrden.save(mapearDTOEntidad(orden)));
                     log.info("SE HA GUARDADO EL REGISTRO NUEVO");
+                    registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
+                    return registroGuardado;
+
                 }
-                registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
-                return registroGuardado;
+
 
             //Caso donde hay orden ya hecha
             case "Orden":
@@ -204,16 +209,21 @@ public class RegistroTiempoServiceImpl implements IRegistroTiempoService {
                     registroNuevo.setTimeReciboOCLlegada(LocalTime.now());
                     registroNuevo.setEstatus("Llegada a Recibo, con Orden");
                     registroNuevo.setProgreso("16.6%");
+                    registroNuevo.setDocNum(registroTiempoDTO.getDocNum());
                     registroNuevo.setCuadrante(registroTiempoDTO.getCuadrante());
                     registroNuevo.setNumeroSemana(calendar.get(Calendar.WEEK_OF_YEAR));
-                    log.info("LOS PARAMETROS HAN SDO ASIGNADOS");
+                    log.info("LOS PARAMETROS HAN SIDO ASIGNADOS");
 
                     //Obtener la orden asociada
                     OrdenCompraDTO orden = sOrden.getOrderByDocNum(registroTiempoDTO.getDocNum());
                     orden.setCuadrante(registroTiempoDTO.getCuadrante());
-                    iOrden.save(impOrden.mapearDTOEntidad(orden));
-                    registroNuevo.setOrdenCompra(impOrden.mapearDTOEntidad(orden));
+                    //iOrden.save(mapearDTOEntidad(orden));
+                    registroNuevo.setDocNum(registroTiempoDTO.getDocNum());
+                    registroNuevo.setOrden(iOrden.save(mapearDTOEntidad(orden)));
+                    registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
                     log.info("SE HA GUARDADO EL REGISTRO NUEVO");
+                    return registroGuardado;
+
                 } else {
                     //Crear y pasar parametros de creacion de pedido especial
                     registroNuevo.setComplementoOrden(listaRegistros.size() + 1);
@@ -222,6 +232,7 @@ public class RegistroTiempoServiceImpl implements IRegistroTiempoService {
                     registroNuevo.setTimeReciboOCLlegada(LocalTime.now());
                     registroNuevo.setEstatus("Llegada a Recibo, Pedido Especial");
                     registroNuevo.setProgreso("16.6%");
+                    registroNuevo.setDocNum(registroTiempoDTO.getDocNum());
                     registroNuevo.setCuadrante(registroTiempoDTO.getCuadrante());
                     registroNuevo.setNumeroSemana(calendar.get(Calendar.WEEK_OF_YEAR));
                     log.info("LOS PARAMETROS HAN SDO ASIGNADOS");
@@ -229,39 +240,74 @@ public class RegistroTiempoServiceImpl implements IRegistroTiempoService {
                     //Obtener la orden asociada
                     OrdenCompraDTO orden = sOrden.getOrderByDocNum(registroTiempoDTO.getDocNum());
                     orden.setCuadrante(registroTiempoDTO.getCuadrante());
-                    iOrden.save(impOrden.mapearDTOEntidad(orden));
-                    registroNuevo.setOrdenCompra(impOrden.mapearDTOEntidad(orden));
+                    registroNuevo.setOrden(iOrden.save(mapearDTOEntidad(orden)));
                     log.info("SE HA GUARDADO EL REGISTRO NUEVO");
-                }
-                registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
-                return registroGuardado;
+                    registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
+                    return registroGuardado;
 
+                }
             //Caso donde no hay orden hecha
             case "Proveedor":
+                List<RegistroTiempoModel> listaRegistrosNota = iRegistro.findByNotaRemision(registroTiempoDTO.getNotaRemision());
+                if(listaRegistrosNota.size()==0) {
+                    log.info("ENTRO AL CASE 3");
+                    //Crear y pasar parametros de creacion de pedido con nombre de proveedor
+                    registroNuevo = new RegistroTiempoModel();
+                    registroNuevo.setComplementoOrden(1);
+                    registroNuevo.setArea("Recibo");
+                    registroNuevo.setDateReciboOCLlegada(LocalDate.now());
+                    registroNuevo.setTimeReciboOCLlegada(LocalTime.now());
+                    registroNuevo.setEstatus("Llegada a Recibo");
+                    registroNuevo.setProgreso("16.6%");
+                    registroNuevo.setNotaRemision(registroTiempoDTO.getNotaRemision());
+                    registroNuevo.setDocNum(registroTiempoDTO.getDocNum());
+                    registroNuevo.setCuadrante(registroTiempoDTO.getCuadrante());
+                    registroNuevo.setNumeroSemana(calendar.get(Calendar.WEEK_OF_YEAR));
+                    log.info("LOS PARAMETROS HAN SDO ASIGNADOS");
 
-                //Crear y pasar parametros de creacion de pedido con nombre de proveedor
-                registroNuevo = new RegistroTiempoModel();
-                registroNuevo.setComplementoOrden(1);
-                registroNuevo.setArea("Recibo");
-                registroNuevo.setDateReciboOCLlegada(LocalDate.now());
-                registroNuevo.setTimeReciboOCLlegada(LocalTime.now());
-                registroNuevo.setEstatus("Llegada a Recibo");
-                registroNuevo.setProgreso("16.6%");
-                registroNuevo.setCuadrante(registroTiempoDTO.getCuadrante());
-                registroNuevo.setNumeroSemana(calendar.get(Calendar.WEEK_OF_YEAR));
-                log.info("LOS PARAMETROS HAN SDO ASIGNADOS");
+                    //Obtener la orden asociada
+                    OrdenCompraModel orden = new OrdenCompraModel();
+                    orden.setCuadrante(registroTiempoDTO.getCuadrante());
+                    orden.setCardName(registroTiempoDTO.getProveedor());
+                    orden.setNotaRemision(registroTiempoDTO.getNotaRemision());
+                    orden.setDocNum(registroNuevo.getDocNum());
+                    registroNuevo.setOrden(iOrden.save(orden));
+                    log.info("ORDEN NUEVA");
+                    registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
+                    log.info("SE HA GUARDADO EL REGISTRO NUEVO");
+                    return registroGuardado;
+                }
+                else{
+                    log.info("ENTRO AL CASE 3");
+                    //Crear y pasar parametros de creacion de pedido con nombre de proveedor
+                    registroNuevo = new RegistroTiempoModel();
+                    registroNuevo.setComplementoOrden(listaRegistrosNota.size()+1);
+                    registroNuevo.setArea("Recibo");
+                    registroNuevo.setDateReciboOCLlegada(LocalDate.now());
+                    registroNuevo.setTimeReciboOCLlegada(LocalTime.now());
+                    registroNuevo.setEstatus("Llegada a Recibo");
+                    registroNuevo.setProgreso("16.6%");
+                    registroNuevo.setNotaRemision(registroTiempoDTO.getNotaRemision());
+                    registroNuevo.setDocNum(registroTiempoDTO.getDocNum());
+                    registroNuevo.setCuadrante(registroTiempoDTO.getCuadrante());
+                    registroNuevo.setNumeroSemana(calendar.get(Calendar.WEEK_OF_YEAR));
+                    log.info("LOS PARAMETROS HAN SDO ASIGNADOS");
 
-                //Obtener la orden asociada
-                OrdenCompraDTO orden = new OrdenCompraDTO();
-                orden.setCuadrante(registroTiempoDTO.getCuadrante());
-                orden.setCardName(registroTiempoDTO.getProveedor());
-                orden.setDocNum(registroNuevo.getDocNum());
-                iOrden.save(impOrden.mapearDTOEntidad(orden));
-                registroNuevo.setOrdenCompra(impOrden.mapearDTOEntidad(orden));
-                registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
-                log.info("SE HA GUARDADO EL REGISTRO NUEVO");
-                return registroGuardado;
+                    //Obtener la orden asociada
+                    OrdenCompraModel orden = iOrden.findByNotaRemision(registroTiempoDTO.getNotaRemision()).orElseThrow(()->new ResourceNotFoundException("Orden","Nota",registroTiempoDTO.getNotaRemision()));
+                    orden.setCuadrante(registroTiempoDTO.getCuadrante());
+                    orden.setCardName(registroTiempoDTO.getProveedor());
+                    orden.setDocNum(registroNuevo.getDocNum());
+                    //iOrden.save(mapearDTOEntidad(orden));
+                    log.info("ORDEN NO NUEVA, NOTA REMISION");
+                    registroNuevo.setOrden(iOrden.save(orden));
+                    registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
+                    log.info("SE HA GUARDADO EL REGISTRO NUEVO");
+                    return registroGuardado;
+                }
             default:
+                OrdenCompraDTO orden = new OrdenCompraDTO();
+                log.info("ENTRO AL DEFAULT");
                 //Crear y pasar parametros de creacion de pedido solo
                 registroNuevo = new RegistroTiempoModel();
                 registroNuevo.setComplementoOrden(1);
@@ -278,8 +324,8 @@ public class RegistroTiempoServiceImpl implements IRegistroTiempoService {
                 orden = new OrdenCompraDTO();
                 orden.setCuadrante(registroTiempoDTO.getCuadrante());
                 orden.setDocNum(registroNuevo.getDocNum());
-                iOrden.save(impOrden.mapearDTOEntidad(orden));
-                registroNuevo.setOrdenCompra(impOrden.mapearDTOEntidad(orden));
+                iOrden.save(mapearDTOEntidad(orden));
+                registroNuevo.setOrden(mapearDTOEntidad(orden));
                 registroGuardado = mapearDTOEntidad(iRegistro.save(registroNuevo));
                 log.info("SE HA GUARDADO EL REGISTRO NUEVO");
                 return registroGuardado;
@@ -329,5 +375,10 @@ public class RegistroTiempoServiceImpl implements IRegistroTiempoService {
     private RegistroTiempoModel mapearEntidadDTO(RegistroTiempoDTO registroTiempoDTO) {
         RegistroTiempoModel registroTiempoModel = modelMapper.map(registroTiempoDTO, RegistroTiempoModel.class);
         return registroTiempoModel;
+    }
+
+    private OrdenCompraModel mapearDTOEntidad(OrdenCompraDTO ordenCompraDTO) {
+        OrdenCompraModel ordenEntidad = modelMapper.map(ordenCompraDTO, OrdenCompraModel.class);
+        return ordenEntidad;
     }
 }
